@@ -28,12 +28,43 @@ function choose(array) {
     return array[rand_range(array.length - 1)];
 }
 
-function produce_play() {
+function produce_play(score) {
     "use strict";
     // THROWER
     // (subject) + (throw_actions) + (type_description)? + (types)
 
-    var thrower_text = ['<span>' + choose(subject) + '</span>', choose(throw_actions)]
+    document.getElementById('play').innerHTML = "";
+
+    // initialize elements
+    var disc = document.createElement('div');
+    disc.id = 'disc';
+
+    var thrower_subject = document.createElement('div');
+    thrower_subject.id = 'thrower_subject';
+    thrower_subject.className = 'people';
+
+    var thrower_subject_contents = document.createElement('ul');
+    thrower_subject_contents.className = 'stack';
+    thrower_subject.appendChild(thrower_subject_contents);
+
+    var catcher_sky = document.createElement('div');
+    catcher_sky.id = 'catcher_sky';
+    catcher_sky.className = 'people';
+
+    var catcher_sky_contents = document.createElement('ul');
+    catcher_sky_contents.className = 'stack';
+    catcher_sky.appendChild(catcher_sky_contents);
+
+    var catcher_grass = document.createElement('div');
+    catcher_grass.id = 'catcher_grass';
+    
+
+    var scoreText = score.replace('<span>','').replace('</span>','').split(' - ');
+    var different = parseInt(scoreText[0]);
+    var same = parseInt(scoreText[1]);
+
+    var thrower = choose(subject)
+    var thrower_text = ['<span>' + thrower + '</span>', choose(throw_actions)]
 
     if (choose(range(1,3)) == 1) {
         var type = choose(type_description)
@@ -49,22 +80,19 @@ function produce_play() {
         thrower_textList += "<li>" + thrower_text[i] + "</li>"
     }
 
-    var thrower_subject = document.getElementById('throw');
-    thrower_subject.innerHTML = thrower_textList;
+    thrower_subject_contents.innerHTML = thrower_textList;
+    document.getElementById('play').appendChild(thrower_subject);
     var thrower_rect = thrower_subject.getBoundingClientRect();
 
     var disc_start_top;
     switch (type) {
         case 'a high-release':
-            console.log('high');
             disc_start_top = thrower_rect.top;
             break;
         case 'a low-release':
-            console.log('low');
             disc_start_top = thrower_rect.top + parseInt($('#thrower_subject').height() / 2);
             break;
         default:
-            console.log('no');
             disc_start_top = thrower_rect.top + parseInt($('#thrower_subject').height() / 4);
             break;
     } 
@@ -73,33 +101,30 @@ function produce_play() {
     // DISC
     // (names_for_disc)
     var disc_text = choose(names_for_disc);
-    var disc = document.getElementById("disc");
     disc.style.top = disc_start_top + 'px';
     disc.style.left = disc_start_left + 'px';
     disc.innerHTML = disc_text;
-    console.log(disc.style.top);
-    console.log(disc.style.left);
+    document.getElementById('play').appendChild(disc);
     
     // CATCHER
     // (subject) + (catch_actions)
-
+    var catcher = choose(subject)
     var catch_action = choose(catch_actions);
     var disc_end_top;
     var disc_end_left;
-    var catcher_rect;
-    
+
     if (catch_action == 'jumps') {
-        var catcher_text = ['<span>' + choose(subject) + '</span>', catch_action, 'to catch', 'it'];
+        var catcher_text = ['<span>' + catcher + '</span>', catch_action, 'to catch', 'it'];
         var catcher_textList = "";
         for (var i = 0; i < catcher_text.length; i++) {
             catcher_textList += "<li>" + catcher_text[i] + "</li>"
         }
-        var catcher_sky = document.getElementById("catch_sky");
-        catcher_sky.innerHTML = catcher_textList;
-        catcher_rect = catcher_sky.getBoundingClientRect();
+        catcher_sky_contents.innerHTML = catcher_textList;
+        document.getElementById('play').appendChild(catcher_sky);
+        var catcher_sky_rect = document.getElementById('catcher_sky').getBoundingClientRect();
 
-        disc_end_top = catcher_rect.top - 150;
-        disc_end_left = catcher_rect.left - $('#disc').width() - 5;
+        disc_end_top = catcher_sky_rect.top - 150;
+        disc_end_left = catcher_sky_rect.left - $('#disc').width() - 5;
 
         setTimeout(
             function() {
@@ -110,20 +135,20 @@ function produce_play() {
                     }, { duration: 1500, queue: false });
 
                     $("#catcher_sky").animate({
-                        top: catcher_rect.top - 200 + 'px' 
+                        top: catcher_sky_rect.top - 200 + 'px' 
                     }, { duration: 1500, queue: false });
                 });
             },
             300
         );
     } else if (catch_action == 'lays out') {
-        var catcher_text = '<span>' + choose(subject) + '</span>' + ' ' + catch_action + ' to catch it';
-        var catcher_grass = document.getElementById("catcher_grass")
+        var catcher_text = '<span>' + catcher + '</span>' + ' ' + catch_action + ' to catch it';
         catcher_grass.innerHTML = catcher_text;
-        catcher_rect = catcher_grass.getBoundingClientRect();
+        document.getElementById('play').appendChild(catcher_grass);
+        var catcher_grass_rect = document.getElementById('catcher_grass').getBoundingClientRect();
 
-        disc_end_top = catcher_rect.top + 50;
-        disc_end_left = catcher_rect.left - $('#disc').width() - 100;
+        disc_end_top = catcher_grass_rect.top + 70;
+        disc_end_left = catcher_grass_rect.left - $('#disc').width() - 120;
 
         setTimeout(
             function() {
@@ -134,39 +159,51 @@ function produce_play() {
                     }, { duration: 1500, queue: false });
 
                     $("#catcher_grass").animate({
-                        top: catcher_rect.top + 50 + 'px',
-                        left: catcher_rect.left - 50 + 'px' 
+                        top: catcher_grass_rect.top + 70 + 'px',
+                        left: catcher_grass_rect.left - 70 + 'px' 
                     }, { duration: 1500, queue: false });
                 });
             },
             300
         );
     } else {
-        var catcher_text = ['<span>' + choose(subject) + '</span>', catch_action, 'to catch', 'it'];
+        var catcher_text = ['<span>' + catcher + '</span>', catch_action, 'to catch', 'it'];
         var catcher_textList = "";
         for (var i = 0; i < catcher_text.length; i++) {
             catcher_textList += "<li>" + catcher_text[i] + "</li>"
         }
-        var catcher_sky = document.getElementById("catch_sky");
-        catcher_sky.innerHTML = catcher_textList;
-        catcher_rect = catcher_sky.getBoundingClientRect();
+        catcher_sky_contents.innerHTML = catcher_textList;
+        document.getElementById('play').appendChild(catcher_sky);
+        var catcher_sky_rect = document.getElementById('catcher_sky').getBoundingClientRect();
 
-        disc_end_top = catcher_rect.top;
-        disc_end_left = catcher_rect.left - $('#disc').width() - 5;
+        disc_end_top = catcher_sky_rect.top + parseInt($('#catcher_sky').height() / 2) - 30;
+        disc_end_left = catcher_sky_rect.left - $('#disc').width() - 5;
 
         setTimeout(
             function() {
-                $('#disc').animate({
-                    top: disc_end_top + 'px',
-                    left: disc_end_left - 100 + 'px'
-                }, { duration: 1500, queue: false });
+                $(function () {
+                    $('#disc').animate({
+                        top: disc_end_top + 'px',
+                        left: disc_end_left - 120 + 'px'
+                    }, { duration: 1500, queue: false });
 
-                $('#catcher_sky').animate({
-                    left: catcher_rect.left - 100 + 'px'
-                }, { duration: 1500, queue: false })
+                    $("#catcher_sky").animate({
+                        left: catcher_sky_rect.left - 120 + 'px'
+                    }, { duration: 1500, queue: false });
+                });
             },
             300
         );
     }
-    
+
+    console.log(thrower);
+    console.log(catcher);
+
+    if (thrower == catcher) {
+        same += 1;
+    } else {
+        different += 1;
+    }
+
+    document.getElementById('score').innerHTML = '<span>' + different + '</span>' + ' - ' + same;
 }

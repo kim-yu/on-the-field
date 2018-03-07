@@ -10,9 +10,9 @@ body {
       position: absolute;
 }
 
-title {
-      text-align: center;
+#title {
       color: #000;
+      display: block;
 }
 
 h1 {
@@ -20,6 +20,29 @@ h1 {
       text-align: center;
       margin: 0;
       padding: 10px;
+      clear: both;
+}
+
+.astext {
+      background:none;
+      border:none;
+      margin:0;
+      padding:0;
+      font-family: Optima, sans-serif;
+      font-size: 18px;
+      color: #117;
+      cursor: pointer;
+}
+
+.astext:hover {
+      color: white;
+}
+
+#score {
+      position: absolute;
+      font-size: 40px;
+      padding: 20px;
+      display: inline;
 }
 
 p {
@@ -49,16 +72,19 @@ span {
       width: 100%;
 }
 
-#thrower_subject{
+.people {
       position: absolute;
       color: black;
-      margin-left: 15px;
-      display: inline-block;
       font-size: 40px;
       bottom: 35%;
 }
 
-#throw, #catch_sky {
+#thrower_subject{
+      margin-left: 15px;
+      display: inline-block;
+}
+
+.stack {
       list-style-type: none;
 }
 
@@ -77,13 +103,13 @@ span {
 }
 
 #catcher_sky {
-      position: absolute;
-      color: black;
-      display: inline-block;
-      font-size: 40px;
       margin-right: 30px;
-      bottom: 35%;
-      right: 0%;
+      display: inline-block;
+      right: 5%;
+}
+
+#catch_grass {
+      position: absolute;
 }
 
 #grass {
@@ -100,6 +126,10 @@ span {
       font-size: 40px;
       bottom: 40%;
       right: 0%;
+}
+
+#catch_grass {
+      position: absolute;
 }
 
 #info {
