@@ -28,7 +28,11 @@ function choose(array) {
     return array[rand_range(array.length - 1)];
 }
 
-function produce_play() {
+function stop_play() {
+    clearInterval(interval);
+}
+
+function play() {
     "use strict";
     // THROWER
     // (subject) + (throw_actions) + (type_description)? + (types)
@@ -223,8 +227,17 @@ function produce_play() {
                 }
                 message += 'Check out https://www.usaultimate.org/equity/ for more information about gender equity and ultimate frisbee.';
                 alert(message) ? "" : location.reload();
+                stop_play();
             }
         },
         2000
     );
+}
+
+function produce_play(full_game) {
+    if (full_game) {
+        setInterval(play, 2000);
+    } else {
+        play();
+    }
 }
