@@ -196,9 +196,6 @@ function produce_play(score) {
         );
     }
 
-    console.log(thrower);
-    console.log(catcher);
-
     if (thrower == catcher) {
         same += 1;
     } else {
@@ -206,4 +203,16 @@ function produce_play(score) {
     }
 
     document.getElementById('score').innerHTML = '<span>' + different + '</span>' + ' - ' + same;
+
+    var message = "";
+    if (same == 15 or different == 15) {
+        if (same == 15) {
+            message += 'Yay there were lots of cross gender scores!';
+        } else {
+            message += 'Hmmmmm "gender-hogging" much?';
+        }
+    } else {
+        message += '<br />Check out <a href="https://www.usaultimate.org/equity/"></a> for more information about gender equity and ultimate frisbee.';
+        alert(message);
+    }
 }
