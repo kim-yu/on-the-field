@@ -46,6 +46,10 @@ h1 {
       color: black;
 }
 
+span,.pronoun {
+      color: white;
+}
+
 p {
       font-size: 18px;
       text-align: center;
