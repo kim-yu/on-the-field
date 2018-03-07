@@ -8,19 +8,22 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <title>On The Field</title>
     </head>
-    <body onload="produce_play('0 - 0');">
+    <body onload="produce_play();">
         <div class="container">
             <div id="sky">
                 <div id="title">
-                    <div id="score">
-                    </div>
                     <h1>On The Field</h1>
-                    <p><button class="astext" onclick="produce_play(document.getElementById('score').innerHTML);">See</button> a different play</p>
+                    <p><button class="astext" onclick="produce_play();">See</button> the next throw</p>
                 </div>
                 <div id="play">
                 </div>
             </div>
             <div id="grass">
+                <div style="text-align: center";>
+                    <div id="score">
+                        <span id="different">0</span> - <span id="same">0</span>
+                    </div>
+                </div>
                 <div id="info">
                     Implemented by Kimberly Yu for <a href="http://nickm.com/classes/the_word_made_digital/2018_spring/">CMS.609</a>. Inspired by <a href="http://preneo.org/nwylde/flipbooks/aboutsomanythings/index.html">About So Many Things</a> and <a href="http://nickm.com/2/the_two.html">The Two</a>.
                 </div>

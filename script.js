@@ -28,7 +28,7 @@ function choose(array) {
     return array[rand_range(array.length - 1)];
 }
 
-function produce_play(score) {
+function produce_play() {
     "use strict";
     // THROWER
     // (subject) + (throw_actions) + (type_description)? + (types)
@@ -59,9 +59,8 @@ function produce_play(score) {
     catcher_grass.id = 'catcher_grass';
     
 
-    var scoreText = score.replace('<span>','').replace('</span>','').split(' - ');
-    var different = parseInt(scoreText[0]);
-    var same = parseInt(scoreText[1]);
+    var different = parseInt(document.getElementById('different').innerHTML);
+    var same = parseInt(document.getElementById('same').innerHTML);
 
     var thrower = choose(subject)
     var thrower_text = ['<span>' + thrower + '</span>', choose(throw_actions)]
@@ -112,6 +111,9 @@ function produce_play(score) {
     var catch_action = choose(catch_actions);
     var disc_end_top;
     var disc_end_left;
+    var catcher_end_top;
+    var catcher_end_left;
+    var catcher_elem;
 
     if (catch_action == 'jumps') {
         var catcher_text = ['<span>' + catcher + '</span>', catch_action, 'to catch', 'it'];
@@ -126,21 +128,10 @@ function produce_play(score) {
         disc_end_top = catcher_sky_rect.top - 150;
         disc_end_left = catcher_sky_rect.left - $('#disc').width() - 5;
 
-        setTimeout(
-            function() {
-                $(function () {
-                    $("#disc").animate({
-                        top: disc_end_top + 'px',
-                        left: disc_end_left + 'px'
-                    }, { duration: 1500, queue: false });
+        catcher_end_top = catcher_sky_rect.top - 200;
+        catcher_end_left = catcher_sky_rect.left;
 
-                    $("#catcher_sky").animate({
-                        top: catcher_sky_rect.top - 200 + 'px' 
-                    }, { duration: 1500, queue: false });
-                });
-            },
-            300
-        );
+        catcher_elem = catcher_sky;
     } else if (catch_action == 'lays out') {
         var catcher_text = '<span>' + catcher + '</span>' + ' ' + catch_action + ' to catch it';
         catcher_grass.innerHTML = catcher_text;
@@ -150,22 +141,10 @@ function produce_play(score) {
         disc_end_top = catcher_grass_rect.top + 70;
         disc_end_left = catcher_grass_rect.left - $('#disc').width() - 120;
 
-        setTimeout(
-            function() {
-                $(function () {
-                    $("#disc").animate({
-                        top: disc_end_top + 'px',
-                        left: disc_end_left + 'px'
-                    }, { duration: 1500, queue: false });
+        catcher_end_top = catcher_grass_rect.top + 70;
+        catcher_end_left = catcher_grass_rect.left - 70;
 
-                    $("#catcher_grass").animate({
-                        top: catcher_grass_rect.top + 70 + 'px',
-                        left: catcher_grass_rect.left - 70 + 'px' 
-                    }, { duration: 1500, queue: false });
-                });
-            },
-            300
-        );
+        catcher_elem = catcher_grass;
     } else {
         var catcher_text = ['<span>' + catcher + '</span>', catch_action, 'to catch', 'it'];
         var catcher_textList = "";
@@ -177,42 +156,75 @@ function produce_play(score) {
         var catcher_sky_rect = document.getElementById('catcher_sky').getBoundingClientRect();
 
         disc_end_top = catcher_sky_rect.top + parseInt($('#catcher_sky').height() / 2) - 30;
-        disc_end_left = catcher_sky_rect.left - $('#disc').width() - 5;
+        disc_end_left = catcher_sky_rect.left - $('#disc').width() - 125;
 
-        setTimeout(
-            function() {
-                $(function () {
-                    $('#disc').animate({
-                        top: disc_end_top + 'px',
-                        left: disc_end_left - 120 + 'px'
-                    }, { duration: 1500, queue: false });
+        catcher_end_top = catcher_sky_rect.top;
+        catcher_end_left = catcher_sky_rect.left - 120;
 
-                    $("#catcher_sky").animate({
-                        left: catcher_sky_rect.left - 120 + 'px'
-                    }, { duration: 1500, queue: false });
+        catcher_elem = catcher_sky;
+    }
+
+    setTimeout(
+        function() {
+            $(function () {
+                $('#disc').animate({
+                    top: disc_end_top + 'px',
+                    left: disc_end_left + 'px'
+                }, { duration: 1500, queue: false });
+
+                $(catcher_elem).animate({
+                    top: catcher_end_top + 'px',
+                    left: catcher_end_left + 'px'
+                }, { duration: 1500, queue: false });
+            });
+        },
+        300
+    );
+
+    setTimeout(
+        function() {
+            if (thrower == catcher) {
+                same += 1;
+                document.getElementById('same').innerHTML = same;
+                $('#same').css({
+                    "font-size": "80px",
+                    "font-weight": "bold"
                 });
-            },
-            300
-        );
-    }
+            } else {
+                different += 1;
+                document.getElementById('different').innerHTML = different;
+                $('#different').css({
+                    "font-size": "80px",
+                    "font-weight": "bold"
+                });
+            }
+        },
+        1800
+    );
 
-    if (thrower == catcher) {
-        same += 1;
-    } else {
-        different += 1;
-    }
+    setTimeout(
+        function() {
+            $('#same').css({
+                "font-size": "70px",
+                "font-weight": "normal"
+            });
 
-    document.getElementById('score').innerHTML = '<span>' + different + '</span>' + ' - ' + same;
+            $('#different').css({
+                "font-size": "70px",
+                "font-weight": "normal"
+            });
 
-    var message = "";
-    if (same == 15 or different == 15) {
-        if (same == 15) {
-            message += 'Yay there were lots of cross gender scores!';
-        } else {
-            message += 'Hmmmmm "gender-hogging" much?';
-        }
-    } else {
-        message += '<br />Check out <a href="https://www.usaultimate.org/equity/"></a> for more information about gender equity and ultimate frisbee.';
-        alert(message);
-    }
+            var message = "";
+            if (different == 15 || same == 15) {
+                if (different == 15) {
+                    message += "Yay there were lots of cross gender scores!\n";
+                } else {
+                    message += 'Hmmmmm "gender-hogging" much?\n';
+                }
+                message += 'Check out https://www.usaultimate.org/equity/ for more information about gender equity and ultimate frisbee.';
+                alert(message) ? "" : location.reload();
+            }
+        },
+        2000
+    );
 }

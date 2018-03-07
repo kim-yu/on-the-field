@@ -39,10 +39,11 @@ h1 {
 }
 
 #score {
-      position: absolute;
-      font-size: 40px;
+      font-size: 70px;
       padding: 20px;
       display: inline;
+      text-align: center;
+      color: black;
 }
 
 p {
@@ -57,8 +58,12 @@ a {
       text-decoration: none;
 }
 
-span {
+#different {
       color: white;
+}
+
+#same {
+      color: #ccc;
 }
 
 #sky {
@@ -116,6 +121,7 @@ span {
       background: #80CD58;
       color: white;
       height: 40%;
+      padding-top: 75px;
 }
 
 #catcher_grass {
@@ -139,4 +145,5 @@ span {
       display: block;
       width: 100%;
       font-size: 20px;
+      color: #ccc;
 }
