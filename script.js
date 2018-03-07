@@ -6,7 +6,7 @@ var types = ['forehand', 'backhand', 'hammer', 'scoober', 'thumber', 'push pass'
 
 var names_for_disc = ['frisbee', 'disc', 'flatball'];
 
-var catch_actions = ['jumps', 'lays out', 'catches'];
+var catch_actions = ['jumps', 'lays out', 'runs'];
 
 function rand_range(maximum) {
     "use strict";
@@ -33,7 +33,7 @@ function produce_play() {
     // THROWER
     // (subject) + (throw_actions) + (type_description)? + (types)
 
-    var thrower_text = [choose(subject), choose(throw_actions)]
+    var thrower_text = ['<span>' + choose(subject) + '</span>', choose(throw_actions)]
 
     if (choose(range(1,3)) == 1) {
         var type = choose(type_description)
@@ -89,7 +89,7 @@ function produce_play() {
     var catcher_rect;
     
     if (catch_action == 'jumps') {
-        var catcher_text = [choose(subject), catch_action, 'to catch', 'it'];
+        var catcher_text = ['<span>' + choose(subject) + '</span>', catch_action, 'to catch', 'it'];
         var catcher_textList = "";
         for (var i = 0; i < catcher_text.length; i++) {
             catcher_textList += "<li>" + catcher_text[i] + "</li>"
@@ -101,18 +101,23 @@ function produce_play() {
         disc_end_top = catcher_rect.top - 150;
         disc_end_left = catcher_rect.left - $('#disc').width() - 5;
 
-        $(function () {
-            $("#disc").animate({
-                top: disc_end_top + 'px',
-                left: disc_end_left + 'px'
-            }, { duration: 1500, queue: false });
+        setTimeout(
+            function() {
+                $(function () {
+                    $("#disc").animate({
+                        top: disc_end_top + 'px',
+                        left: disc_end_left + 'px'
+                    }, { duration: 1500, queue: false });
 
-            $("#catcher_sky").animate({
-                top: catcher_rect.top - 200 + 'px' 
-            }, { duration: 1500, queue: false });
-        });
+                    $("#catcher_sky").animate({
+                        top: catcher_rect.top - 200 + 'px' 
+                    }, { duration: 1500, queue: false });
+                });
+            },
+            300
+        );
     } else if (catch_action == 'lays out') {
-        var catcher_text = choose(subject) + ' ' + catch_action + ' to catch it';
+        var catcher_text = '<span>' + choose(subject) + '</span>' + ' ' + catch_action + ' to catch it';
         var catcher_grass = document.getElementById("catcher_grass")
         catcher_grass.innerHTML = catcher_text;
         catcher_rect = catcher_grass.getBoundingClientRect();
@@ -120,19 +125,24 @@ function produce_play() {
         disc_end_top = catcher_rect.top + 50;
         disc_end_left = catcher_rect.left - $('#disc').width() - 100;
 
-        $(function () {
-            $("#disc").animate({
-                top: disc_end_top + 'px',
-                left: disc_end_left + 'px'
-            }, { duration: 1500, queue: false });
+        setTimeout(
+            function() {
+                $(function () {
+                    $("#disc").animate({
+                        top: disc_end_top + 'px',
+                        left: disc_end_left + 'px'
+                    }, { duration: 1500, queue: false });
 
-            $("#catcher_grass").animate({
-                top: catcher_rect.top + 50 + 'px',
-                left: catcher_rect.left - 50 + 'px' 
-            }, { duration: 1500, queue: false });
-        });
+                    $("#catcher_grass").animate({
+                        top: catcher_rect.top + 50 + 'px',
+                        left: catcher_rect.left - 50 + 'px' 
+                    }, { duration: 1500, queue: false });
+                });
+            },
+            300
+        );
     } else {
-        var catcher_text = [choose(subject), catch_action, 'it'];
+        var catcher_text = ['<span>' + choose(subject) + '</span>', catch_action, 'to catch', 'it'];
         var catcher_textList = "";
         for (var i = 0; i < catcher_text.length; i++) {
             catcher_textList += "<li>" + catcher_text[i] + "</li>"
@@ -144,10 +154,19 @@ function produce_play() {
         disc_end_top = catcher_rect.top;
         disc_end_left = catcher_rect.left - $('#disc').width() - 5;
 
-        $('#disc').animate({
-            top: disc_end_top + 'px',
-            left: disc_end_left + 'px'
-        }, 1500);
+        setTimeout(
+            function() {
+                $('#disc').animate({
+                    top: disc_end_top + 'px',
+                    left: disc_end_left - 100 + 'px'
+                }, { duration: 1500, queue: false });
+
+                $('#catcher_sky').animate({
+                    left: catcher_rect.left - 100 + 'px'
+                }, { duration: 1500, queue: false })
+            },
+            300
+        );
     }
     
 }

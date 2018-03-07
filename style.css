@@ -34,6 +34,10 @@ a {
       text-decoration: none;
 }
 
+span {
+      color: white;
+}
+
 #sky {
       background: #BAECF2;
       color: #000;
